@@ -193,6 +193,27 @@ export default {
       }
       return list;
     },
+    getFullData() {
+      if (this.multiple) {
+        let datas = [];
+        for (let o of this.objects) {
+          let data = this.categoryObj[o.key] || this.object;
+          datas.push(this.getParent(data));
+        }
+        return datas;
+      } else if (this.object) {
+        let data = this.categoryObj[this.object.key] || this.object;
+        return this.getParent(data);
+      }
+      return null;
+    },
+    getParent(data) {
+      let list = [utils.copy(data.value)];
+      if (data.parentKey != null && this.categoryObj[data.parentKey]) {
+        list.push(...this.getParent(this.categoryObj[data.parentKey]));
+      }
+      return list;
+    },
     dispose() {
       if (this.multiple) {
         return this.objects.map(item => this.type == 'key' ? item.key : item.value).filter(item => {
@@ -224,9 +245,8 @@ export default {
       let datas = [];
       if (utils.isArray(this.param.datas)) {
         datas = this.param.datas;
-      }
-      if (utils.isFunction(this.param.datas)) {
-        datas = this.param.datas.call(null);
+      } else if (utils.isFunction(this.param.datas)) {
+        datas = this.param.datas.apply(this.param);
       }
       if (utils.isFunction(this.param.getTotalDatas) || utils.isFunction(this.param.getDatas)) {
         datas = [];

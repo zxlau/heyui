@@ -32,6 +32,13 @@
         <td>-</td>
         <td>false</td>
       </tr>
+      <tr>
+        <td>iconClass</td>
+        <td>1.24.0+</td>
+        <td>String</td>
+        <td>-</td>
+        <td>h-icon-star-on</td>
+      </tr>
     </table>
 
     <h3>Rate 事件</h3>

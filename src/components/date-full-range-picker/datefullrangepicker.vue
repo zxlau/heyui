@@ -47,10 +47,11 @@ export default {
   mixins: [Locale],
   props: {
     defaultType: {
-      type: [String],
+      type: String,
       default: 'week' // year, month, week
     },
     option: Object,
+    placement: String,
     noBorder: {
       type: Boolean,
       default: false
@@ -86,6 +87,7 @@ export default {
   },
   data() {
     let format = config.getOption('datepicker.format');
+    let defaultType = this.value && this.value.type ? this.value.type : this.defaultType;
     return {
       allviews: {
         year: this.t('h.date.year'),
@@ -105,7 +107,7 @@ export default {
         start: manba(),
         end: manba().add(1, manba.MONTH)
       },
-      view: this.defaultType || 'year',
+      view: defaultType,
       rangeEnd: '',
       isShow: false
     };
@@ -131,6 +133,7 @@ export default {
       this.dropdown = new Dropdown(el, {
         trigger: 'click',
         content,
+        placement: this.placement,
         events: {
           show() {
             that.isShow = true;
@@ -174,6 +177,9 @@ export default {
       this.nowDate[range] = '';
     },
     parse(value) {
+      if (this.value && this.value.type) {
+        this.view = this.value.type;
+      }
       this.parseSingle(value, 'start');
       this.parseSingle(value, 'end');
     },
